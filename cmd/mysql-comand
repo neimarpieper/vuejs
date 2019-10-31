@@ -1,0 +1,189 @@
+UPDATE lote SET status=1 WHERE status = 3;
+
+scp root@192.168.18.248:/var/www/html/temas/37/vendendo.jpg .
+scp root@192.168.18.248:/var/www/html/temas/37/aberto.jpg .
+scp root@192.168.18.248:/var/www/html/temas/37/fechado.jpg .
+
+
+curl -get "http://192.168.12.248/temas/tema.php?filial=F11&tipoPDV=1" > /dev/null 2>&1
+
+
+root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # rm aberto.jpg fechado.jpg vendendo.jpg -rf
+root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # scp root@192.168.22.248:/var/www/html/temas/37/aberto.jpg fechado.jpg vendendo.jpg .
+root@192.168.22.248's password: 
+aberto.jpg                                                                                                                                                                                                                                   100%  706KB 104.3MB/s   00:00    
+cp: não foi possível obter estado de 'fechado.jpg': Arquivo ou diretório inexistente
+cp: não foi possível obter estado de 'vendendo.jpg': Arquivo ou diretório inexistente
+1 root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # scp root@192.168.22.248:/var/www/html/temas/37/aberto.jpg .                                                                                                                                                         :(
+root@192.168.22.248's password: 
+aberto.jpg                                                                                                                                                                                                                                   100%  706KB 101.8MB/s   00:00    
+root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # scp root@192.168.22.248:/var/www/html/temas/37/fechado.jpg .    
+root@192.168.22.248's password: 
+fechado.jpg                                                                                                                                                                                                                                  100%  706KB  95.4MB/s   00:00    
+root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # scp root@192.168.22.248:/var/www/html/temas/37/vendendo.jpg .    
+root@192.168.22.248's password: 
+vendendo.jpg                                                                                                                                                                                                                                 100%  671KB 102.5MB/s   00:00    
+root@igpdv ..share/IrmaosGoncalves/IGPDV/qml/images # 
+
+
+
+
+*.h,*.qml,*.cpp,*.txt,*.scxml
+
+ssh://git@192.168.1.135:22/home/git/pdv.git
+ssh://git@192.168.1.135:/home/git/pdv.git
+ssh://git@104.236.110.250:22/source/pdv.git
+
+
+I'm trying to untar a file with QProcess that's in a directory returned by QDir::tempPath(), as follows:
+I get the correct output for an extraction by looking at the standardOuput for the QProcess but there's no file extracted at the end. Manually running tar from a shell works fine on the file so I know it's not corrupt, I'd have assumed a permissions issue but I'm actually downloading the file with the application to the temporary directory so the application should have write access.
+
+Edit: I've also now tried it with the file in the home directory, it's definitely there but I get the same results as it being in the temp directory, verbose output indicating success but no resulting file.
+
+
+
+extract.start("tar", QStringList() << "-xvzf" + QDir::tempPath() + "/thefile.tar.gz");
+
+
+
+
+ou need to set the working directory, which by default, is likely to be the folder of the executable's binary.
+
+You can set the working directory with QProcess::setWorkingDirectory
+
+
+
+
+SET FOREIGN_KEY_CHECKS=0;
+
+truncate igpdv_sinc.bandeiras;
+truncate igpdv_sinc.direitos_perfil;
+truncate igpdv_sinc.lote;
+truncate igpdv_sinc.pagamentos_detalhe;
+truncate igpdv_sinc.pagamentos_tipo;
+truncate igpdv_sinc.parametros;
+truncate igpdv_sinc.parcelamentos;
+truncate igpdv_sinc.pdv;
+truncate igpdv_sinc.perfis_usuario;
+truncate igpdv_sinc.produtos;
+truncate igpdv_sinc.produtos_grupo;
+truncate igpdv_sinc.promocoes;
+truncate igpdv_sinc.promocoes_brindes;
+truncate igpdv_sinc.promocoes_produtos;
+truncate igpdv_sinc.rotinas;
+truncate igpdv_sinc.usuarios;
+SET FOREIGN_KEY_CHECKS=1;
+
+
+
+
+Fax a chamada de uma Url no linux. (máquina do Jenkins)
+curl -get http://192.168.2.161:8235/TRetag/ServerStatus
+
+
+SET FOREIGN_KEY_CHECKS=0;
+truncate igpdv.bandeiras;
+truncate igpdv.direitos_perfil;
+truncate igpdv.pagamentos_detalhe;
+truncate igpdv.pagamentos_tipo;
+truncate igpdv.parametros;
+truncate igpdv.parcelamentos;
+truncate igpdv.pdv;
+truncate igpdv.perfis_usuario;
+truncate igpdv.produtos;
+truncate igpdv.produtos_grupo;
+truncate igpdv.promocoes;
+truncate igpdv.promocoes_brindes;
+truncate igpdv.promocoes_produtos;
+truncate igpdv.rotinas;
+truncate igpdv.usuarios;
+SET FOREIGN_KEY_CHECKS=1;
+
+
+SET FOREIGN_KEY_CHECKS=0;
+truncate igpdv.produtos_descontos;
+SET FOREIGN_KEY_CHECKS=1;
+
+
+make[2]: Warning: File 'src/app/igpdv' has modification time 30370 s in the future
+[  4%] Building CXX object src/app/CMakeFiles/igpdv.dir/core.cpp.o
+
+
+atenção: a opção --force está obsoleta; em vez disso, use --overwrite
+atenção: arquivo de configuração /etc/pacman.conf, linha 77: diretiva "Server" na seção "options" não foi reconhecida.
+atenção: arquivo de configuração /etc/pacman.conf, linha 81: diretiva "Server" na seção "options" não foi reconhecida.
+atenção: arquivo de configuração /etc/pacman.conf, linha 88: diretiva "Server" na seção "options" não foi reconhecida.
+erro: falha ao obter o arquivo "igpdv-master-1-x86_64.pkg.tar.xz" de igpdvarchrepo : The requested URL returned error: 404
+atenção: falha ao fazer o download de http://igpdvarchrepo/igpdv/os/x86_64/igpdv-master-1-x86_64.pkg.tar.xz
+erro: 'http://igpdvarchrepo/igpdv/os/x86_64/igpdv-master-1-x86_64.pkg.tar.xz': erro inesperado
+Exit code: 1
+
+SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE  TABLE_NAME = 'movimentos_pdv' AND COLUMN_NAME = 'id';
+
+
+SELECT EXTRA FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'movimentos_pdv' AND COLUMN_NAME = 'id' AND DATA_TYPE = 'int' AND COLUMN_DEFAULT IS NULL
+    AND IS_NULLABLE = 'NO' AND EXTRA like '%auto_increment%';
+    
+    
+
+ALTER TABLE `igpdv`.`movimentos_pdv` 
+CHANGE COLUMN `id` `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ;
+
+ALTER TABLE `igpdv`.`movimentos_pdv` 
+ADD COLUMN `id_movimento_inicial` INT(11) NULL AFTER `id_venda_final`,
+ADD COLUMN `id_movimento_final` INT(11) NULL AFTER `id_movimento_inicial`,
+ADD COLUMN `total_movimentos2` VARCHAR(45) NULL AFTER `data_sinc`;
+
+
+
+ALTER TABLE `igpdv`.`movimentos_pdv` 
+CHANGE COLUMN `id_movimento_inicial` `id_movimento_inicial` INT(11) NULL DEFAULT '0' COMMENT 'Número do primeiro movimento de operador do dia.' ,
+CHANGE COLUMN `id_movimento_final` `id_movimento_final` INT(11) NULL DEFAULT '0' COMMENT 'Número do último movimento de operador do dia.' ,
+CHANGE COLUMN `total_movimentos` `total_movimentos` DECIMAL(16,4) NULL DEFAULT '0.0000' COMMENT 'Valor total de vendas dos movimentos de operador.' ,
+CHANGE COLUMN `data_sinc` `data_sinc` DATETIME NULL DEFAULT '0.0000' ;
+
+
+
+
+  SELECT * FROM movimentos_pdv WHERE date_format(data_movimento, '%d/%m/%Y') = '19/10/2018';       
+    SELECT * FROM movimentos_pdv WHERE date_format(data_movimento, '%Y-%m-%d') = '2018-10-19' and data_fechamento IS NOT NULL;
+    
+     SELECT * FROM movimentos_pdv WHERE data_fechamento IS NOT NULL AND data_sinc IS NULL;                 
+     
+     
+SELECT * FROM igpdv.vendas WHERE date_format(data_inicio, '%Y-%m-%d') = '2018-10-24';
+
+SELECT count(1) FROM igpdv.vendas WHERE date_format(data_inicio, '%Y-%m-%d') = '2018-10-24';
+
+
+
+
+SELECT sum(valor_total)  FROM igpdv.vendas WHERE id_movimento >= 127 and id_movimento <= 129 ;
+SELECT sum(valor_total) FROM igpdv.vendas WHERE date_format(data_inicio, '%Y-%m-%d') = '2018-10-24';   
+
+
+
+SELECT SUM(CASE WHEN data_sinc IS NOT NULL THEN valor_total ELSE 0 END) AS PROCESSADO, 
+SUM(CASE WHEN data_sinc IS NULL THEN valor_total ELSE 0 END) AS FALTANDO, 
+SUM(valor_total) AS TOTAL_GERAL  FROM igpdv.vendas 
+ WHERE date_format(data_inicio, '%Y-%m-%d') = '2018-10-24' AND STATUS = 4;
+
+ 
+//----------------------------------------------------------- 
+--Ver atualizacoes de preco de um determinado produto
+//-----------------------------------------------------------
+SELECT igpdv_sinc.lote.data_inicio_sinc
+     , igpdv_sinc.lote.tipo
+     , igpdv_sinc.produtos.*
+  FROM igpdv_sinc.produtos
+ INNER
+  JOIN igpdv_sinc.lote
+    ON igpdv_sinc.lote.id = igpdv_sinc.produtos.id_lote
+ WHERE igpdv_sinc.produtos.codigo = 229760 -- 4503606 -- 3407
+       -- igpdv_sinc.produtos.codigo_barras = 7891000108376
+ ORDER
+    BY igpdv_sinc.lote.data_inicio_sinc DESC
+ 
+
+ 
+ diff update-igpdv.sh /retag/update-igpdv.sh

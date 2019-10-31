@@ -1,0 +1,900 @@
+--------------------------------------------------------
+qt5-base
+
+
+pacman -S make
+pacman -S cmake
+pacman -S extra-cmake-modules
+
+pacman -S qt5-base
+pacman -S qt5-seriaport
+pacman -S qt5-scxml
+pacman -S qt5-graphicaleffects
+
+pacman -S grantlee
+pacman -S curl
+
+pacman -S mariadb
+
+-------------------------------------------------------------------------------------------
+
+===========================================================================================
+Quando o pdv é reniciado ele não esta estartando o mariadb automaticamente
+-------------------------------------------------------------------------------------------
+sudo pacman -Ss mariadb ou mysql
+
+mariadb--10.1.32-1
+
+
+
+
+sudo systemctl enable mariadb
+ 
+sudo systemctl status mariadb
+
+● mariadb.service - MariaDB 10.1.30 database server
+   Loaded: loaded (/usr/lib/systemd/system/mariadb.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:mysqld(8)
+           https://mariadb.com/kb/en/library/systemd/
+
+
+ 2. Agora vamos inicializar a base de dados do MariaDB, necessário antes de iniciar o serviço:
+
+# mysql_install_db --user=mysql --basedir=/usr --datadir=/var/lib/mysql
+
+ 
+ 4. Colocando password para o root:
+
+# mysql_secure_installation
+
+ ------------------------------------------------------------------------------------------- 
+ 
+ 
+ 
+ # CRIA OS BANCOS DE DADOS, USUARIOS E ESTRUTURA DO BANCO
+mysql -u root --password=igpdv@1035 <<EOF > /dev/null 2>&1
+create database igpdv;
+create database igpdv_sinc;
+create user 'pdv'@'localhost' identified by 'igpdv@1035';
+create user 'pdv'@'%' identified by 'igpdv@1035';
+grant all on *.* to 'pdv'@'localhost';
+grant all on *.* to 'pdv'@'%';
+use igpdv;
+\. /usr/local/bin/schema_igpdv_.sql
+use igpdv_sinc;
+\. /usr/local/bin/schema_igpdv_sinc.sql
+EOF
+ 
+------------------------------------------------------------------------------------------- 
+
+
+
+
+smb://192.168.1.100/apache/tv5/
+
+
+Criar link simbolico:
+ln -f -s /dev/ttyACM2 /dev/smsd_port
+
+
+--------------------------------------------------------
+Instalar nomachine
+git clone https://aur.archlinux.org/nomachine.git
+cd nomechine
+makepkg -si
+--------------------------------------------------------
+
+Instalar xdotool
+git clone https://aur.archlinux.org/xdotool-git.git
+cd nomechine
+makepkg -si
+
+
+scp /var/cache/pacman/pkg/xdotool-3.20160805.1-2-x86_64.pkg.tar.xz root@192.168.100.121:/var/cache/pacman/pkg/
+
+conectar no host e extrair pacote com o pacman
+pacman -U /var/cache/pacman/pkg/xdotool-3.20160805.1-2-x86_64.pkg.tar.xz
+
+Adicionar usuario no XAUTHORITY
+export XAUTHORITY="/home/pdv/.Xauthority"                                                                                                                   :(
+
+Enviar teclas
+root@igpdv ~ # export DISPLAY=:0.0 && xdotool key r
+root@igpdv ~ # export DISPLAY=:0.0 && xdotool key F3
+
+
+--------------------------------------------------------
+SQL pra encontrar registros duplicados 
+
+SELECT codigo_barras, Count(*) FROM igpdv_sinc.produtos GROUP BY codigo_barras HAVING Count(*) > 1
+
+
+
+SQL Server - Verificar dados duplicados em dois campos simultâneos
+
+
+select CPF, MAT, count(*)
+from Tabela
+group by CPF, MAT
+having count(*) > 1
+
+
+
+--------------------------------------------------------
+ver logs do arch linux
+
+journalctl --since=today
+journalctl --since "2019-01-26 18:07:00" --until "2019-01-26 18:10:31"
+
+Pode também usar com parâmetros de PID, UID, GID:
+
+# journalctl _PID=5000
+# journalctl _UID=33
+
+Para mostrar LOGs do Kernel:
+
+# journaulctl -k
+
+
+Erro encontrado no travamento IGCARD
+jan 25 17:22:14 igpdv audit[711]: ANOM_ABEND auid=1000 uid=1000 gid=985 ses=1 pid=711 comm="igpdv" exe="/usr/bin/pdv/igpdv" sig=11 res=1
+--------------------------------------------------------
+
+--------------------------------------------------------
+ver dependecias de lib
+ldd $(which node)
+--------------------------------------------------------
+
+http://192.168.29.161:8235/TRetag/ServerStatus
+http://192.168.29.161:8235/TWeb/Ping
+http://192.168.29.161:8235/TWeb/GetTime
+
+nEw http://192.168.8.161:8235/TSistema/Config
+
+--------------------------------------------------------
+pacman-key --recv-keys F382BBBD
+pacman-key --recv-keys 256E/EE2EEEEE
+
+
+
+For debugging purposes, you can access pacman's keyring directly with gpg, e.g.: 
+gpg --homedir /etc/pacman.d/gnupg --list-keys
+
+
+pacman-key --recv-keys 1A60DC44245D06FEF90623D6EEEEE2EEEE2EEEEE
+pacman-key --recv-keys 5A2257D19FF7E1E0E415968CE62F853100F0D0F0
+
+
+Note: The archlinux-keyring package, which is a dependency of pacman, contains the latest keys. However keys can also be updated manually using pacman-key --refresh-keys (as root). While doing --refresh-keys, your local key will also be looked up on the remote keyserver, and you will receive a message about it being not found. This is nothing to be concerned about.
+
+
+pacman -S archlinux-keyring
+
+pacman-key --refresh-keys
+
+
+
+Re: Problem refreshing pacman keys
+does something like gpg --search-keys abcdefghij work ?
+
+    ---------------------------
+PHP Warning: PHP Startup: Unable to load dynamic library '/usr/lib/php/modules/ssh2.so' - /usr/lib/php/modules/ssh2.so: undefined symbol: zend_hash_add_or_update in Unknown on line 0
+
+Soluçao:
+yaourt php-ssh
+
+
+    ---------------------------
+pacman-key --init
+pacman -Sy archlinux-keyring
+pacman-key --populate archlinux
+pacman-key --refresh-keys 
+    ---------------------------
+
+pub   ed25519 1998-03-24 [SCA]
+      1A60DC44245D06FEF90623D6EEEEE2EEEE2EEEEE
+uid           [  full  ] Gaetan Bisson <gaetan@fenua.org>
+uid           [  full  ] Gaetan Bisson <bisson@gaati.org>
+uid           [  full  ] Gaetan Bisson <bisson@archlinux.org>
+sub   cv25519 2017-08-27 [E]
+
+pub   dsa2048 2010-01-10 [SCA]
+      5A2257D19FF7E1E0E415968CE62F853100F0D0F0
+uid           [  full  ] Gaetan Bisson <gaetan@fenua.org>
+uid           [  full  ] Gaetan Bisson <root@vesath.org>
+uid           [  full  ] Gaetan Bisson <bisson@gaati.org>
+uid           [  full  ] Gaetan Bisson <bisson@archlinux.org>
+uid           [  full  ] Gaetan Bisson <gaetan.bisson@normalesup.org>
+sub   elg2048 2010-01-10 [E]
+
+--------------------------------------------------------
+
+
+replace de aspas simpes na query 
+"       replace(produtos.descricao,'''','') as descricao,     "
+
+
+pacman -U http://igpdvarchrepo/igpdv/os/x86_64/igpdv-$VERSAO_ESPERADA-x86_64.pkg.tar.xz --noconfirm --force
+
+pacman -U http://igpdvarchrepo/igpdv/os/x86_64/igpdv-v0.4.33-1-x86_64.pkg.tar.xz --noconfirm --force
+
+
+--------------------------------------------------------
+192.168.1.111 /srv/http/dashboard
+
+/var/cache/pacman/pkg
+/var/lib/jenkins/workspace/
+/srv/http/igpdv/os/x86_64/
+--------------------------------------------------------
+
+Apagar tag da versao a adicionar novamente 
+
+git tag -d v1.0
+git tag -a v1.0 -m "My commit message"
+
+Then:
+git push --tags -f
+--------------------------------------------------------
+
+
+nano /etc/ntp.conf
+server timeserver
+systemctl status ntpd.service
+systemctl enable ntpd.service
+timedatectl set-ntp true
+
+
+localectl set-x11-keymap br abnt2
+
+timedatectl set-ntp true 
+ntpdate timeserver
+hwclock -w
+ 
+UPDATE pdv SET versao_esperada='v0.3.30-1'
+
+
+
+
+Find - Pesquisar trechos (strings) dentro de arquivos 
+$ find ./* -type f -exec grep -l STRING {} \;
+Altere "STRING" com o trecho que gostaria de procurar.
+
+find * -type f -exec grep -l 127.0.0.1 {} \;
+
+
+grep -R -H -i "Desenvolvimento"
+
+
+
+// compilar informando onde esta as library (-lmylib = libmylib.so)
+g++ -o main main.cpp -I../mylib/ -L../mylib/ -lmylib
+
+// Informar onde a shared library está
+export LD_LIBRARY_PATH=/run/media/qt/OS/treinamento-c++/lab1c/mylib/
+
+// mostrar libs lincadas dinamicamente
+ldd -r main
+
+// mostrar diretório onde esta
+pwd
+
+// remover path de library
+unset LD_LIBRARY_PATH
+
+// verificar memory leaks
+valgrind --leak-check=yes ./main
+
+// compilar projeto com debug
+g++ -o main -g main.cpp
+
+
+// SQLITE
+[qt@arch-irmaos-goncalves lab5]$ sqlite3 irmaosgoncalves.db
+SQLite version 3.17.0 2017-02-13 16:02:40
+Enter ".help" for usage hints.
+sqlite> create table vendas (id INTEGER PRIMARY KEY, data DATE, loja VARCHAR(20));
+sqlite> create table produtos (id INTEGER PRIMARY KEY, id_venda INTEGER, nome VARCHAR(50), preco REAL, FOREIGN KEY(id_venda) REFERENCES vendas(id) );
+sqlite> .schema vendas
+CREATE TABLE vendas (id INTEGER PRIMARY KEY, data DATE, loja VARCHAR(20));
+sqlite> .schema produtos
+CREATE TABLE produtos (id INTEGER PRIMARY KEY, id_venda INTEGER, nome VARCHAR(50), preco REAL, FOREIGN KEY(id_venda) REFERENCES vendas(id) );
+sqlite> insert into vendas values (1, '2017-04-05', 'Loja Jaru');
+sqlite> insert into vendas values (2, '2017-04-05', 'Loja Jaru');                                                                                                                            
+sqlite> insert into vendas values (3, '2017-04-05', 'Loja Porto Velho');                                                                                                                 
+sqlite> insert into produtos values (1, 1, 'arroz', 15.00); 
+
+
+
+localectl set-x11-keymap br abnt2
+
+timedatectl set-ntp true 
+ntpdate timeserver
+hwclock -w
+ 
+UPDATE pdv SET versao_esperada='v0.3.30-1'
+
+
+
+nano /usr/local/bin/update-igpdv.sh 
+
+
+echo Retorno do /usr/local/bin/detecta-pdv.sh [${TIPO}] >> $LOG
+
+/data/pdv-iso/pdv-iso/airootfs/usr/local/bin/
+
+
+setserial -g /dev/ttyS[0123456]
+
+00:1c.0 PCI bridge: Intel Corporation C600/X79 series chipset PCI Express Root Port 4 (rev b5) (prog-if 00 [Normal decode])
+        Flags: bus master, fast devsel, latency 0, IRQ 19
+        Bus: primary=00, secondary=07, subordinate=07, sec-latency=0
+        I/O behind bridge: None
+        Memory behind bridge: None
+        Prefetchable memory behind bridge: None
+        Capabilities: <access denied>
+        Kernel driver in use: pcieport
+        Kernel modules: shpchp
+
+       
+        
+
+
+
+
+In addition to search, yaourt supports other standard package management operations.
+
+    yaourt -S : install or update a package
+    yaourt -Sy: synchronize the pacman package database
+    yaourt -R : remove a package
+    yaourt -G : get the PKGBUILD for a package
+    yaourt --stats: show how much space packages are using
+
+
+
+192.168.120.30\jenkins -> backup jenkins
+---------------------------------------------------------
+Atualizar igpdv via pacman
+pacman -S igpdv-master
+---------------------------------------------------------
+Modificando Seu Último Commit
+git commit --amend    
+---------------------------------------------------------
+Voltar o um commit desejado.
+    git reset --hard {hash-do-commit-desejado}
+---------------------------------------------------------
+Apagar branch
+        git branch -D the_local_branch
+---------------------------------------------------------
+Atualização revisão com novo commit.
+    arc diff —update <D4>
+---------------------------------------------------------
+Atualização os dados da branch atual com base na branch indicada
+    git rebase <branch_desejada>
+   
+---------------------------------------------------------    
+BAIXAR PATCH DE REVISION
+
+arc patch D123
+---------------------------------------------------------
+Verificar ao quais grupos o usuario faz parte
+    groups ti006
+---------------------------------------------------------
+Adicionar o usuario ao grupo root
+    usermod -G root -a ti006
+---------------------------------------------------------
+Adicionar o usuario ao grupo uucp (grupo das portas ttySx)
+    usermod -G uucp -a ti006    
+---------------------------------------------------------
+Adicionar usuario na lista /etc/sudores
+
+## User privilege specification
+root ALL=(ALL) ALL
+ti006 ALL=(ALL) NOPASSWD:ALL
+
+## Uncomment to allow members of group sudo to execute any command
+# %sudo ALL=(ALL) ALL
+#%ti006 ALL=(ALL) ALL
+
+
+---------------------------------------------------------
+Obter informacoes do dispositivo USB (Executar como root)
+
+sudo udevadm info -a -n /dev/ttyUSB0 | grep '{idProduct}' | head -n1
+sudo udevadm info -a -n /dev/ttyUSB0 | grep '{idVendor}' | head -n1
+sudo udevadm info -a -n /dev/ttyUSB0 | grep '{serial}' | head -n1
+
+sudo udevadm info -a -n /dev/COM4 | grep 'DRIVERS' | head -n1
+sudo udevadm info -a -n /dev/COM4 | grep 'SUBSYSTEM' | head -n1
+sudo udevadm info -a -n /dev/COM4 | grep '{port}' | head -n1
+sudo udevadm info -a -n /dev/COM4 | grep '{vendor}' | head -n1
+sudo udevadm info -a -n /dev/COM4 | grep 'KERNEL' | head -n1
+
+
+$ udevadm info /dev/sdb | grep ID_SERIAL
+
+
+
+You can use udev for this. Create a file /etc/udev/rules.d/90-rename-serial-ports.rule containing
+
+ACTION=="add" KERNEL=="ttyS2" NAME="ttyS1"
+
+should do it (not tested). Note the difference between "==" and "=".
+
+
+---------------------------------------------------------
+udevadm info -a -n /dev/ttyACM2
+
+    ATTRS{idProduct}=="0005"
+    ATTRS{idVendor}=="23b8"
+    ATTRS{ltm_capable}=="no"
+    ATTRS{manufacturer}=="URMET DARUMA"
+    
+---------------------------------------------------------
+Criar arquivo de regras na pasta /etc/udev/rules.d/
+
+nano 99-usb-serial.rules
+#Pinpad na COM1 (ttyS0)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="c901", ATTRS{idProduct}=="c901", SYMLINK+="ttyS0"
+
+#Daruma na COM4 (ttyS3)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="23b8", ATTRS{idProduct}=="0005", SYMLINK+="ttyS3"
+
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="23b8", ATTRS{idProduct}=="0xa050", SYMLINK+="ttyS3"
+
+
+Loading new rules
+# udevadm control --reload
+
+To manually force udev to trigger your rules: 
+# udevadm trigger
+---------------------------------------------------------
+
+
+[pdv@pdv-testbed getty@tty1.service.d]$ pwd
+/etc/systemd/system/getty@tty1.service.d
+[pdv@pdv-testbed getty@tty1.service.d]$ ls
+override.conf
+[pdv@pdv-testbed getty@tty1.service.d]$ cat override.conf 
+[Service]
+ExecStart=
+ExecStart=-/usr/bin/agetty --autologin pdv --noclear %I $TERM
+[pdv@pdv-testbed getty@tty1.service.d]$ 
+
+
+---------------------------------------------------------
+Instalar ssh (comando nao encontrado)
+
+pacman -U dnssec-anchors-20170711-1-any.pkg.tar.xz
+pacman -U ldns-1.7.0-4-x86_64.pkg.tar.xz
+pacman -U openssh-7.7p1-1-x86_64.pkg.tar.xz
+
+
+Habilitar/permitir conexao ssh
+
+Editar arquivo /etc/ssh/sshd_config
+
+
+#LoginGraceTime 2m
+PermitRootLogin yes    <==== Descomentar a linha 
+#StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
+
+---------------------------------------------------------
+Rodar aplicação via ssh 
+
+# vim /etc/ssh/sshd_config
+
+descomentar X11Forwading yes
+
+reiniciar serviço
+systemctl restart sshd
+
+conectar na máquina e executar o aplicativo
+---------------------------------------------------------
+
+GAMMARAY
+
+Instalar KDStateMachineEditor (https://github.com/KDAB/KDStateMachineEditor)
+
+1 - git clone https://github.com/KDAB/KDStateMachineEditor.git
+2 - entre no diretorio e crie a pasta build
+3 - entre na pasta build
+4 - cmake .. -DCMAKE_INSTALL_PREFIX=/usr/
+5 - make -j4
+6 - sudo make install
+7 - yaourt -Sy gammaray
+
+
+
+
+Para compilar o PDV:
+
+    Ir na pasta do projeto
+    Criar a pasta build: mkdir build
+    Chamar o cmake: cmake ../ -DCMAKE_INSTALL_PREFIX=/usr
+    Compilar o pdv: make -j 5
+    Instalar o pdv: sudo make install
+    Para desinstalar executar: sudo make uninstall
+   
+    
+Workflow para submissão de pedidos de revisão:
+
+    Realizar as modificações de código necessárias
+    Fazer um git pull
+    Adicionar os arquivos e fazer um git commit -m "titulo da alteracao"
+    Executar 'arc diff' para submeter a revisão
+        4.1. Informar o login do revisor no campo Reviewers Ex: sandroandrade 
+        4.2. Mover a mensagem de log do commit para o campo Summary
+        4.3 No campo Test Plan colocar "nenhum" 
+        4.4 Abaixo de Test Plan colocar "Fixes <id-da-tarefa-a-ser-fechada>" Ex: Fixes T81
+    
+    Aguardar a revisão
+    
+    Voltar para o passo 1, usando "git commit -a" no passo 3
+    Quando a revisão for aceita, executar 'arc land'
+
+Se precisar abrir um novo pedido de revisão com uma revisão ainda aberta, no workflow anterior usar:
+
+    arc diff --create (na primeira submissão do novo pedido de revisão)
+    arc diff --update <revision> (na submissão de correções)
+        
+     
+     retirar o arquivo do commit 
+     git reset HEAD instalar.sh
+    
+    
+
+Enviar arquivos para revisão:
+
+1 - Atualizar o repositório. Entre na pasta do PDV e execute o comando: "git pull"
+
+2 - Adicionar os arquivos. Execute o comando add nomedoarquivomodificado para adicioná-lo na lista de arquivos que serão enviados para o branche.
+
+3 - Execute o git commit para enviar arquivos para o branche
+
+4 - Executar 'arc diff' para submeter a revisão 
+    4.1. Informar o login do revisor no campo Reviewers 
+    4.2. Mover a mensagem de log do commit para o campo Summary 
+    4.3 No campo Test Plan colocar "nenhum" 
+    4.4 Abaixo de Test Plan colocar "Fixed <id-da-tarefa-a-ser-fechada>"
+
+ 
+ 
+--------------------------------------------------------------------------- 
+git fetch downloads the latest from remote without trying to merge or rebase anything.
+Then the git reset resets the master branch to what you just fetched. The --hard option changes all the files in your working tree to match the files in origin/master
+ 
+Resetar dados do repositorio:
+
+    git fetch --all
+
+Then, you have two options:
+
+    git reset --hard origin/master
+
+OR If you are on some other branch:
+
+    git reset --hard origin/<branch_name>
+    
+    
+
+    
+Re-enviar revisão:     
+Sandro Andrade, [21.11.17 11:58]
+Oi @Neimarpieper é só fazer os passos descritos em http://104.236.110.250/w/comandos_importantes/:
+
+Sandro Andrade, [21.11.17 11:58]
+1) Faça o "git add" dos arquivos que você mudou
+        git add CMakeLists.txt
+        git add src/app/CMakeLists.txt
+        git add src/app/main.qml
+        git add src/plugins/CMakeLists.txt
+        git add src/plugins/scannerplugin/CMakeLists.txt
+        git add src/plugins/scannerplugin/scannerplugin.cpp
+        git add src/plugins/scannerplugin/scannerplugin.h
+        
+2) Executa o "git commit -a"
+3) Executa "arc diff —update D4"
+
+---------------------------------------------------------------------------
+
+ERRO ao fazer git pull;
+
+    error: Your local changes to the following files would be overwritten by merge:
+            src/app/main.qml
+    Please commit your changes or stash them before you merge.
+    Aborting
+
+Sandro Andrade, [22.11.17 08:12]
+É porque você tem alguma modificação feita nele e que ainda não sofreu commit.
+Execute um "git diff src/app/main.qml" e veja o que é ... se for alguma modificação desprezível você pode voltar pra versão original executando "git checkout — src/app/main.qml". Daí você faz o "git pull" novamente.
+
+---------------------------------------------------------------------------
+
+Execute "rm -rf .git/MERGE_HEAD" e execute o amend novamente 
+
+
+
+
+===========================================================================================
+Template_Cupom_Fiscal
+-------------------------------------------------------------------------------------------
+orignal:
+/data/pdv/src/plugins/impressoracupomplugin/template_cupom_fiscal.tmpl
+
+instalado na pasta:
+/usr/share/IrmaosGoncalves/IGPDV/template_cupom_fiscal.tmpl
+-------------------------------------------------------------------------------------------
+
+
+===========================================================================================
+No arquivo  /home/pdv/.bash_profile fica os scripts que serão executados assim com o usuário pdv for autenticado.
+-------------------------------------------------------------------------------------------
+#
+# ~/.bash_profile
+#
+
+[[ -f ~/.bashrc ]] && . ~/.bashrc
+
+if [ -z "$DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
+  exec startx
+fi
+-------------------------------------------------------------------------------------------
+
+
+===========================================================================================
+No arquivo  /home/pdv/.config/i3/config fica o executavel a ser executado
+-------------------------------------------------------------------------------------------
+  exec /home/pdv/build/src/app/igpdvBeta
+-------------------------------------------------------------------------------------------
+
+
+
+Momento delicado: Integração de um Branch no Master
+
+Muitas vezes quando vamos implementar uma funcionalidade nova, criamos um branch novo para isso, e depois que ela está funcional juntamos esse branch de volta ao master.
+
+Só que normalmente no meio do desenvolvimento dessa funcionalidade, aparece algo novo no master e temos que colocar isso no branch que estamos trabalhando.
+E ai? Qual deve ser usado nesse caso? Rebase ou Merge?
+Atualizando o Branch com commits do Master
+
+Bem, nesse caso devemos usar o REBASE, seguindo o procedimento abaixo.
+
+git checkout nova_funcionalidade
+git rebase master
+
+Isso vai pegar todos os commits que você fez no seu branch e coloca-los depois das alterações provenientes do master, o que deixa até bem organizado, já que todos os commits referentes a essa funcionalidade ficam juntos um do outro, facilitando depois caso você queira reverter apenas essa funcionalidade.
+Juntando o Branch no Master
+
+Antes de mais nada, devemos garantir que nosso branch com a nova funcionalidade está atualizado com o master, portanto execute os comandos mostrados anteriormente, em Atualizando o Branch com commits do Master.
+Depois disso, o que devemos fazer é um MERGE, conforme será explicado a seguir.
+
+git checkout master
+git merge nova_funcionalidade
+
+Com isso garantimos que nosso master ficará igual ao nosso branch da nova funcionalidade (que por sua vez garantimos que ele tinha todos os commits do master fazendo o rebase do master nele).
+Revisão
+
+Só para frisar, o procedimento final de quando vamos juntar um branch no master é:
+
+git checkout nova_funcionalidade
+git rebase master
+git checkout master
+git merge nova_funcionalidade
+
+Espero que essas dica ajudem vocês, assim como me ajudaram também.
+
+-------------------------------------------------------------------------------------------
+Executar aplicacao com usuario root:
+
+sudo setcap cap_sys_rawio=ep /usr/bin/igpdv
+
+-------------------------------------------------------------------------------------------
+Para verificar se existem espacos em branco nos fontes
+./check-trailing-characters.sh 
+
+-------------------------------------------------------------------------------------------
+Para gerar documentation
+./generate-documentation.sh
+
+-------------------------------------------------------------------------------------------
+Criar mapeamento da pasta retag em outro servidor (TPLinux)
+Editar arquivo /etc/fstab com root
+    sudo nano /etc/fstab
+
+inserir linha abaixo:
+    syscom1:/home/tplinux/retag         /retag           nfs     defaults,vers=3 0 1
+-------------------------------------------------------------------------------------------
+        
+Comandos Importantes
+Updated TodayAll Users
+
+Para compilar o PDV:
+
+    Ir na pasta do projeto
+    Criar a pasta build: mkdir build
+    Chamar o cmake: cmake ../ -DCMAKE_INSTALL_PREFIX=/usr
+    Compilar o pdv: make -j 5
+    Instalar o pdv: sudo make install
+    Para desinstalar executar: sudo make uninstall
+
+Para instalar pacotes no Arch Linux sem pedir confirmação:
+
+    pacman -S <nome-do-pacote> --noconfirm
+    yaourt -S <nome-do-pacote> --noconfirm
+
+Para remover pacotes no Arch Linux:
+
+    pacman -Rsn <nome-do-pacote>
+    yaourt -Rsn <nome-do-pacote>
+    
+    yaourt -Syuu --noconfirm (atualização do linux)
+    
+    sudo pacman -S sqlitebrowser
+    
+
+Revert KDE desktop to default settings (Sistema Lento):
+
+    rm ~/.config/plasma-org.kde.plasma.desktop-appletsrc
+    rm ~/.config/plasmashellrc
+    rm ~/.local/share/kactivitymanagerd
+    pacman -S kactivity
+    kbuildsycoca5 && kquitapp plasmashell && kstart plasmashell
+-------------------------------------------------------------------------------------------    
+qDebug() << "caminho atual: " << QDir::currentPath();
+qDebug() << "caminho atual: " << QCoreApplication::applicationDirPath();
+
+
+versão original dor arquivo
+git checkout -- src/app/core.cpp
+./check-trailing-characters.sh 
+
+-------------------------------------------------------------------------------------------    
+
+SET FOREIGN_KEY_CHECKS=0;
+truncate produtos_venda;
+truncate pagamentos_cartao;
+truncate pagamentos;
+truncate nfce;
+truncate vendas;
+truncate movimentos_operador;
+SET FOREIGN_KEY_CHECKS=1;
+
+
+-------------------------------------------------------------------------------------------    
+Modificando Seu Último Commit
+
+Uma das situações mais comuns para desfazer algo, acontece quando você faz o commit muito cedo e possivelmente esqueceu de adicionar alguns arquivos, ou você bagunçou sua mensagem de commit. Se você quiser tentar fazer novamente esse commit, você pode executá-lo com a opção --amend:
+
+git commit --amend
+
+-------------------------------------------------------------------------------------------    
+
+ IGPDVDialog { visible: core.stateMachine.cupom_impresso; labelText: "Venda concluída com sucesso"; backgroundColor: "#1a6b51" }
+ 
+-------------------------------------------------------------------------------------------     
+
+Uso: pacman-key [opções] operação [alvos]
+
+Gerencia lista de chaves confiáveis do pacman
+
+Operações:
+  -a, --add                 Adiciona as chaves especificadas
+                            (vazio, para entrada padrão)
+  -d, --delete              Remove as keyids especificadas
+  -e, --export              Exporta a keyid especificada ou todas
+  -f, --finger              Lista a impressão digital da keyid especificada
+                            ou todas
+  -l, --list-keys           Lista a keyid especificada ou todas
+  -r, --recv-keys           Obtém as keyids especificadas
+  -u, --updatedb             Atualiza a base de dados de confiáveis do pacman
+  -v, --verify              Verifica arquivos especificados pelas assinaturas
+  --edit-key                Apresenta um menu para a tarefa de gerenciamento
+                            de chaves de keyids
+  --import                  Importa pubring.gpg dos diretórios
+  --import-trustdb          Importa valores de confiança do proprietário do
+                            trustdb.gpg nos diretórios
+  --init                    Garante que o chaveiro está inicializado
+                             corretamente
+  --list-sigs               Lista as chaves e suas assinaturas
+  --lsign-key               Assina localmente a keyid especificada
+  --populate                Recarrega as chaves padrões dos chaveiros dados
+                            em '/usr/share/pacman/keyrings'
+  --refresh-keys            Atualiza a chave especificada ou todas de um
+                            servidor de chaves
+
+opções:
+  --config <arquivo>         Usa um arquivo de configuração alternativo (ao
+                             invés de '/etc/pacman.conf')
+  --gpgdir <diretório>       Define um diretório alternativo para GnuPG
+                             (invés de '/etc/pacman.d/gnupg')
+  --keyserver <url-de-servidor>
+                            Especifica um servidor de chaves para usar,
+                            se necessário
+
+  -h, --help                 Exibe essa mensagem de ajuda e sai
+  -V, --version              Exibe versão do programa
+
+  
+  
+  
+  
+  --------------------------------------------------------
+pacman-key --recv-keys F382BBBD
+pacman-key --recv-keys 256E/EE2EEEEE
+
+curl -O https://archive.archlinux.org/repos/2018/08/27/extra/os/x86_64/php-apache-7.2.9-1-x86_64.pkg.tar.xz
+
+
+For debugging purposes, you can access pacman's keyring directly with gpg, e.g.: 
+gpg --homedir /etc/pacman.d/gnupg --list-keys
+
+
+pacman-key --recv-keys 1A60DC44245D06FEF90623D6EEEEE2EEEE2EEEEE
+pacman-key --recv-keys 5A2257D19FF7E1E0E415968CE62F853100F0D0F0
+
+
+Note: The archlinux-keyring package, which is a dependency of pacman, contains the latest keys. However keys can also be updated manually using pacman-key --refresh-keys (as root). While doing --refresh-keys, your local key will also be looked up on the remote keyserver, and you will receive a message about it being not found. This is nothing to be concerned about.
+
+
+pacman -S archlinux-keyring
+
+pacman-key --refresh-keys
+
+
+
+Re: Problem refreshing pacman keys
+does something like gpg --search-keys abcdefghij work ?
+
+    ---------------------------
+PHP Warning: PHP Startup: Unable to load dynamic library '/usr/lib/php/modules/ssh2.so' - /usr/lib/php/modules/ssh2.so: undefined symbol: zend_hash_add_or_update in Unknown on line 0
+
+Soluçao:
+yaourt php-ssh
+
+
+    ---------------------------
+pacman-key --init
+pacman -Sy archlinux-keyring
+pacman-key --populate archlinux
+pacman-key --refresh-keys 
+    ---------------------------
+
+pub   ed25519 1998-03-24 [SCA]
+      1A60DC44245D06FEF90623D6EEEEE2EEEE2EEEEE
+uid           [  full  ] Gaetan Bisson <gaetan@fenua.org>
+uid           [  full  ] Gaetan Bisson <bisson@gaati.org>
+uid           [  full  ] Gaetan Bisson <bisson@archlinux.org>
+sub   cv25519 2017-08-27 [E]
+
+pub   dsa2048 2010-01-10 [SCA]
+      5A2257D19FF7E1E0E415968CE62F853100F0D0F0
+uid           [  full  ] Gaetan Bisson <gaetan@fenua.org>
+uid           [  full  ] Gaetan Bisson <root@vesath.org>
+uid           [  full  ] Gaetan Bisson <bisson@gaati.org>
+uid           [  full  ] Gaetan Bisson <bisson@archlinux.org>
+uid           [  full  ] Gaetan Bisson <gaetan.bisson@normalesup.org>
+sub   elg2048 2010-01-10 [E]
+
+--------------------------------------------------------
+
+
+#SigLevel    = Required DatabaseOptional
+SigLevel = Never
+#LocalFileSigLevel = Optional
+LocalFileSigLevel = Never
+#RemoteFileSigLevel = Required
+
+
+
+
+
+
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    // Parametro para habilitar validação de usuario por filial.
+    // -------------------------------------------------------------------------------------------------------------------------------------
+    QJsonObject param     = DB()->obterParametros({"validar_filial_usuario"});
+    int validarFilialUsuario = param["validar_filial_usuario"].toVariant().toInt();
